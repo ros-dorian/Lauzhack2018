@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">BobstHack2018</string>
+    <string name="fit_image_to_scan">Fit Image to Scan</string>
 </resources>
