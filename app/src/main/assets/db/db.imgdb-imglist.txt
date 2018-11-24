@@ -1,0 +1,5 @@
+front_panel_left.png|imgs\valid_imgs/front_panel_left.png
+front_panel_middle.png|imgs\valid_imgs/front_panel_middle.png
+front_panel_right.png|imgs\valid_imgs/front_panel_right.png
+right.png|imgs\valid_imgs/right.png
+top_meca.png|imgs\valid_imgs/top_meca.png
