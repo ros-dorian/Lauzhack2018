@@ -21,7 +21,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/input_counter"
                 android:textColor="@android:color/background_light"
-                android:textSize="24sp"
+                android:textSize="12sp"
                 android:textStyle="normal|bold"
                 android:visibility="visible"/>
             <TextView
@@ -30,9 +30,10 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textColor="@android:color/background_light"
-                android:textSize="24sp"
+                android:textSize="12sp"
                 android:visibility="visible"/>
         </LinearLayout>
 
     </LinearLayout>
+    
 </android.support.constraint.ConstraintLayout>

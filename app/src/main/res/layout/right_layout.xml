@@ -21,7 +21,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/machine_state"
                 android:textColor="@android:color/background_light"
-                android:textSize="24sp"
+                android:textSize="12sp"
                 android:textStyle="normal|bold"
                 android:visibility="visible"/>
             <TextView
@@ -30,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textColor="@android:color/background_light"
-                android:textSize="24sp"
+                android:textSize="12sp"
                 android:visibility="visible"/>
         </LinearLayout>
 
@@ -45,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/machine_speed"
                 android:textColor="@android:color/background_light"
-                android:textSize="24sp"
+                android:textSize="12sp"
                 android:textStyle="normal|bold"
                 android:visibility="visible"/>
             <TextView
@@ -54,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textColor="@android:color/background_light"
-                android:textSize="24sp"
+                android:textSize="12sp"
                 android:visibility="visible"/>
         </LinearLayout>
 
@@ -69,7 +69,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/cutting_force"
                 android:textColor="@android:color/background_light"
-                android:textSize="24sp"
+                android:textSize="12sp"
                 android:textStyle="normal|bold"
                 android:visibility="visible"/>
             <TextView
@@ -78,7 +78,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textColor="@android:color/background_light"
-                android:textSize="24sp"
+                android:textSize="12sp"
                 android:visibility="visible"/>
         </LinearLayout>
 
