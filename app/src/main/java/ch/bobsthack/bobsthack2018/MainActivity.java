@@ -4,7 +4,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Layout;
 import android.util.Log;
-import android.util.Pair;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,16 +19,14 @@ import com.google.ar.sceneform.ux.ArFragment;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import ch.bobsthack.bobsthack2018.tracker.AugmentedImageNode;
 import ch.bobsthack.bobsthack2018.tracker.CenterNode;
-import ch.bobsthack.bobsthack2018.ui.uiNode;
+import ch.bobsthack.bobsthack2018.ui.LayoutNode;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,10 +37,14 @@ public class MainActivity extends AppCompatActivity {
     private CenterNode mCenterTop;
     private CenterNode mCenterFront;
 
-    private uiNode mainUi;
-    private uiNode sideUi;
-    private uiNode frontUi;
-    private uiNode backUi;
+    private LayoutNode mainUi;
+    private LayoutNode sideUi;
+    private LayoutNode frontUi;
+    private LayoutNode backUi;
+
+    private boolean topLayoutAdded = false;
+    private boolean rightLayoutAdded = false;
+    private boolean frontLayoutAdded = false;
 
     private Map<AugmentedImage, AugmentedImageNode> augmentedImageMap = new HashMap<>();
     private Map<AugmentedImage, TrackPointData> facePositions = new HashMap<>();
@@ -121,15 +122,15 @@ public class MainActivity extends AppCompatActivity {
                         augmentedImageMap.put(augmentedImage, node);
                         mArFragment.getArSceneView().getScene().addChild(node);
 
-                        mainUi = new uiNode(this, R.layout.main_ui);
-                        sideUi = new uiNode(this, R.layout.right_layout);
-                        frontUi = new uiNode(this, R.layout.front_layout);
-                        backUi = new uiNode(this, R.layout.back_layout);
+                        mainUi = new LayoutNode(this, R.layout.main_ui);
+                        sideUi = new LayoutNode(this, R.layout.right_layout);
+                        frontUi = new LayoutNode(this, R.layout.front_layout);
+                        backUi = new LayoutNode(this, R.layout.back_layout);
 
-                        mainUi.setPosition(new Vector3(0,0,0), node);
-                        sideUi.setPosition(new Vector3(0, 0, 0), );
-                        frontUi.setPosition(new Vector3(0, 0, 0), );
-                        backUi.setPosition(new Vector3(0, 0, 0), );
+                        mainUi.setPosition(new Vector3(0,0,0));
+                        sideUi.setPosition(new Vector3(0, 0, 0));
+                        frontUi.setPosition(new Vector3(0, 0, 0));
+                        backUi.setPosition(new Vector3(0, 0, 0));
 
                         Vector3 position = null;
 
@@ -144,7 +145,10 @@ public class MainActivity extends AppCompatActivity {
                         if(pointData != null) {
                             facePositions.put(augmentedImage, pointData);
                         }
+                        /*LayoutNode mainUi = new LayoutNode(this, R.layout.main_ui);
+                        mainUi.setPosition(new Vector3(0,0,0), node);*/
                     }
+
                     break;
 
                 case STOPPED:
@@ -184,6 +188,13 @@ public class MainActivity extends AppCompatActivity {
                         break;
                 }
             }
+        }
+
+        if(mCenterTop != null && !topLayoutAdded) {
+            LayoutNode mainUi = new LayoutNode(this, R.layout.main_ui);
+            mainUi.setPosition(mCenterTop.getWorldPosition());
+            mArFragment.getArSceneView().getScene().addChild(mainUi);
+            topLayoutAdded = true;
         }
     }
 
