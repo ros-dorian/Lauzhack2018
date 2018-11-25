@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent">
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/textViewLabelId"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:text="@string/id"
+            android:textColor="@android:color/background_light"
+            android:textSize="24sp"
+            android:textStyle="normal|bold"
+            android:visibility="visible"/>
+        <TextView
+            android:id="@+id/textViewId"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@android:color/background_light"
+            android:textSize="24sp"
+            android:visibility="visible"/>
+    </LinearLayout>
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="visible">
+        <TextView
+            android:id="@+id/textViewLabelOutputCounter"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:text="@string/output_counter"
+            android:textColor="@android:color/background_light"
+            android:textSize="24sp"
+            android:textStyle="normal|bold"
+            android:visibility="visible"/>
+        <TextView
+            android:id="@+id/textViewOutputCounter"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@android:color/background_light"
+            android:textSize="24sp"
+            android:visibility="visible"/>
+    </LinearLayout>
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/textViewLabelJobName"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:text="@string/job_name"
+            android:textColor="@android:color/background_light"
+            android:textSize="24sp"
+            android:textStyle="normal|bold"
+            android:visibility="visible"/>
+        <TextView
+            android:id="@+id/textViewJobName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@android:color/background_light"
+            android:textSize="24sp"
+            android:visibility="visible"/>
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

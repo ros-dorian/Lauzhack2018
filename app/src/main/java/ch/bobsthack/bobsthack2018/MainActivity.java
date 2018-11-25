@@ -15,11 +15,15 @@ import com.google.ar.sceneform.FrameTime;
 import com.google.ar.sceneform.math.Vector3;
 import com.google.ar.sceneform.ux.ArFragment;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import ch.bobsthack.bobsthack2018.tracker.AugmentedImageNode;
 import ch.bobsthack.bobsthack2018.ui.uiNode;
@@ -45,6 +49,23 @@ public class MainActivity extends AppCompatActivity {
         mFitToScanView = findViewById(R.id.image_view_fit_to_scan);
 
         mArFragment.getArSceneView().getScene().addOnUpdateListener(this::onUpdateFrame);
+
+        new Thread(() -> {
+            while(true) {
+                Data data = getData();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // setInfo(data); TODO
+                    }
+                });
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }}
+        ).start();
     }
 
     @Override
@@ -126,5 +147,31 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return result;
+    }
+
+    public Data getData() {
+        //JSon query
+        String url = "http://www.duggan.ch/~akv_lauzhack/mastercut.php?MachineName=MasterCut";
+        JsonQuery jsonQuery = new JsonQuery();
+        JSONObject json = null;
+        try {
+            json = jsonQuery.getJson(url).get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        if (json != null)
+            Log.i("Lauzhack", json.toString());
+
+        Data data = null;
+
+        try {
+            if (json != null)
+                data = new Data(json);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return data;
     }
 }
