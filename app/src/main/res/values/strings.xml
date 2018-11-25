@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">BobstHack2018</string>
     <string name="fit_image_to_scan">Fit Image to Scan</string>
+    <string name="id">ID</string>
+    <string name="output_counter">OutputCounter</string>
+    <string name="input_counter">InputCounter</string>
+    <string name="job_name">JobName</string>
+    <string name="machine_state">MachineState</string>
+    <string name="machine_speed">MachineSpeed</string>
+    <string name="cutting_force">CuttingForce</string>
 </resources>
