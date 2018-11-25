@@ -45,6 +45,6 @@ public class CenterNode extends Node {
         }
 
         setWorldPosition(worldPosition);
-        setRenderable(mPointer.getNow(null));
+        //setRenderable(mPointer.getNow(null));
     }
 }
