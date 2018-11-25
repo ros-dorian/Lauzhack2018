@@ -22,18 +22,23 @@ import java.util.List;
 import java.util.Map;
 
 import ch.bobsthack.bobsthack2018.tracker.AugmentedImageNode;
+import ch.bobsthack.bobsthack2018.tracker.CenterNode;
 
 public class MainActivity extends AppCompatActivity {
-
-    public final static int FACE_RIGHT = 0;
-    public final static int FACE_FRONT = 1;
-    public final static int FACE_TOP = 2;
 
     private ArFragment mArFragment;
     private ImageView mFitToScanView;
 
+    private CenterNode mCenterRight;
+    private CenterNode mCenterTop;
+    private CenterNode mCenterFront;
+
     private Map<AugmentedImage, AugmentedImageNode> augmentedImageMap = new HashMap<>();
-    private Map<AugmentedImage, Vector3> facePositions = new HashMap<>();
+    private Map<AugmentedImage, TrackPointData> facePositions = new HashMap<>();
+
+    private final static float BOX_WIDTH = 0.5f;
+    private final static float BOX_HEIGHT = 0.3f;
+    private final static float BOX_SIDE = 0.1f;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +49,10 @@ public class MainActivity extends AppCompatActivity {
         mFitToScanView = findViewById(R.id.image_view_fit_to_scan);
 
         mArFragment.getArSceneView().getScene().addOnUpdateListener(this::onUpdateFrame);
+
+        mCenterRight = null;
+        mCenterTop = null;
+        mCenterFront = null;
     }
 
     @Override
@@ -83,19 +92,17 @@ public class MainActivity extends AppCompatActivity {
                         augmentedImageMap.put(augmentedImage, node);
                         mArFragment.getArSceneView().getScene().addChild(node);
 
-                        Vector3 position = null;
+                        TrackPointData pointData = null;
                         switch(augmentedImage.getIndex()) {
-                            case 0: position = new Vector3(FACE_FRONT, -1/6f, 1f);
-                            case 1: position = new Vector3(FACE_FRONT, 1/6f, 0.5f);
-                            case 2: position = new Vector3(FACE_FRONT, -1f, 0.5f);
-                            case 3: position = new Vector3(FACE_RIGHT, 0, 0);
-                            case 4: position = new Vector3(FACE_TOP, 2/6f, 0);
+                            case 0: pointData = new TrackPointData(node.getWorldPosition(), BoxSide.RIGHT, -0.4f, 1f); break;
+                            case 1: pointData = new TrackPointData(node.getWorldPosition(), BoxSide.RIGHT, -0.2f, -0.5f); break;
+                            case 2: pointData = new TrackPointData(node.getWorldPosition(), BoxSide.RIGHT, -0.2f, -0.9f); break;
+                            case 3: pointData = new TrackPointData(node.getWorldPosition(), BoxSide.FRONT, 0, 0); break;
+                            case 4: pointData = new TrackPointData(node.getWorldPosition(), BoxSide.TOP, 4f, 0); break;
                         }
-                        if(position != null) {
-                            facePositions.put(augmentedImage, position);
+                        if(pointData != null) {
+                            facePositions.put(augmentedImage, pointData);
                         }
-
-                        Vector3[] centers = calculateCenters();
                     }
                     break;
 
@@ -105,18 +112,99 @@ public class MainActivity extends AppCompatActivity {
                     break;
             }
         }
+
+        Vector3[] centers = calculateCenterPosition();
+        for(int i = 0; i < centers.length; i++) {
+            if(centers[i] != null) {
+                switch(i) {
+                    case 0:
+                        if(mCenterRight != null) {
+                            mArFragment.getArSceneView().getScene().onRemoveChild(mCenterRight);
+                        }
+                        mCenterRight = new CenterNode(this);
+                        mCenterRight.setPosition(centers[i]);
+                        mArFragment.getArSceneView().getScene().addChild(mCenterRight);
+                        break;
+                    case 1:
+                        if(mCenterTop != null) {
+                            mArFragment.getArSceneView().getScene().onRemoveChild(mCenterTop);
+                        }
+                        mCenterTop = new CenterNode(this);
+                        mCenterTop.setPosition(centers[i]);
+                        mArFragment.getArSceneView().getScene().addChild(mCenterTop);
+                        break;
+                    case 2:
+                        if(mCenterFront != null) {
+                            mArFragment.getArSceneView().getScene().onRemoveChild(mCenterFront);
+                        }
+                        mCenterFront = new CenterNode(this);
+                        mCenterFront.setPosition(centers[i]);
+                        mArFragment.getArSceneView().getScene().addChild(mCenterFront);
+                        break;
+                }
+            }
+        }
     }
 
-    private Vector3[] calculateCenters() {
+    private Vector3[] calculateCenterPosition() {
         Vector3[] result = new Vector3[3];
 
-        List<Pair<Vector3, Vector3>> availablePositions = new ArrayList<>();
-        for(Map.Entry<AugmentedImage, AugmentedImageNode> entry : augmentedImageMap.entrySet()) {
-            availablePositions.add(new Pair(entry.getValue().getWorldPosition(), facePositions.get(entry.getKey())));
-        }
-
-        for(Pair<Vector3, Vector3> item : availablePositions) {
-
+        for(Map.Entry<AugmentedImage, TrackPointData> item : facePositions.entrySet()) {
+            TrackPointData point = item.getValue();
+            AugmentedImageNode imageNode = augmentedImageMap.get(item.getKey());
+            int side = point.getBoxSide().ordinal();
+            Vector3 xVector;
+            Vector3 yVector;
+            switch(side) {
+                case 0:
+                    xVector = imageNode.getForward().normalized();
+                    yVector = imageNode.getRight().normalized();
+                    if(result[side] == null) {
+                        xVector = xVector.scaled(BOX_WIDTH * point.getSideX());
+                        yVector = yVector.scaled(BOX_HEIGHT * point.getSideY());
+                        result[side] = Vector3.add(point.getWorldPosition(), Vector3.add(xVector, yVector));
+                    } else {
+                        xVector = xVector.scaled(BOX_WIDTH * point.getSideX());
+                        yVector = yVector.scaled(BOX_HEIGHT * point.getSideY());
+                        result[side] = Vector3.lerp(
+                                result[side],
+                                Vector3.add(point.getWorldPosition(), Vector3.add(xVector, yVector)),
+                                0.5f);
+                    }
+                    break;
+                case 1:
+                    xVector = imageNode.getRight().normalized();
+                    yVector = imageNode.getForward().normalized();
+                    if(result[side] == null) {
+                        xVector = xVector.scaled(BOX_SIDE * point.getSideX());
+                        yVector = yVector.scaled(BOX_HEIGHT * point.getSideY());
+                        result[side] = Vector3.add(point.getWorldPosition(), Vector3.add(xVector, yVector));
+                    } else {
+                        xVector = xVector.scaled(BOX_SIDE * point.getSideX());
+                        yVector = yVector.scaled(BOX_HEIGHT * point.getSideY());
+                        result[side] = Vector3.lerp(
+                                result[side],
+                                Vector3.add(point.getWorldPosition(), Vector3.add(xVector, yVector)),
+                                0.5f);
+                    }
+                    break;
+                case 2:
+                    xVector = imageNode.getRight().normalized();
+                    yVector = imageNode.getForward().normalized();
+                    if(result[side] == null) {
+                        xVector = xVector.scaled(BOX_WIDTH * point.getSideX());
+                        yVector = yVector.scaled(BOX_SIDE * point.getSideY());
+                        result[side] = Vector3.add(point.getWorldPosition(), Vector3.add(xVector, yVector));
+                    } else {
+                        xVector = xVector.scaled(BOX_WIDTH * point.getSideX());
+                        yVector = yVector.scaled(BOX_SIDE * point.getSideY());
+                        result[side] = Vector3.lerp(
+                                result[side],
+                                Vector3.add(point.getWorldPosition(), Vector3.add(xVector, yVector)),
+                                0.5f);
+                    }
+                    break;
+            }
         }
 
         return result;

@@ -10,10 +10,6 @@ import com.google.ar.sceneform.HitTestResult;
 import com.google.ar.sceneform.Node;
 import com.google.ar.sceneform.math.Quaternion;
 import com.google.ar.sceneform.math.Vector3;
-import com.google.ar.sceneform.rendering.Color;
-import com.google.ar.sceneform.rendering.Material;
-import com.google.ar.sceneform.rendering.MaterialFactory;
-import com.google.ar.sceneform.rendering.ShapeFactory;
 import com.google.ar.sceneform.rendering.ViewRenderable;
 
 import java.util.concurrent.CompletableFuture;
@@ -67,7 +63,7 @@ public class AugmentedImageNode extends AnchorNode {
         centerNode.setParent(this);
         centerNode.setLocalPosition(localPosition);
         centerNode.setLocalRotation(Quaternion.axisAngle(new Vector3(1, 0, 0), 90));
-        centerNode.setRenderable(mCenter.getNow(null));
+        //centerNode.setRenderable(mCenter.getNow(null));
     }
 
     public AugmentedImage getImage() {
