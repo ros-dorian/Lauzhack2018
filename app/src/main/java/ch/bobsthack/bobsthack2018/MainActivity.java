@@ -2,10 +2,12 @@ package ch.bobsthack.bobsthack2018;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Layout;
 import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.ar.core.AugmentedImage;
@@ -38,6 +40,11 @@ public class MainActivity extends AppCompatActivity {
     private CenterNode mCenterTop;
     private CenterNode mCenterFront;
 
+    private uiNode mainUi;
+    private uiNode sideUi;
+    private uiNode frontUi;
+    private uiNode backUi;
+
     private Map<AugmentedImage, AugmentedImageNode> augmentedImageMap = new HashMap<>();
     private Map<AugmentedImage, TrackPointData> facePositions = new HashMap<>();
 
@@ -65,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        // setInfo(data); TODO
+                        setInfo(data);
                     }
                 });
                 try {
@@ -114,9 +121,15 @@ public class MainActivity extends AppCompatActivity {
                         augmentedImageMap.put(augmentedImage, node);
                         mArFragment.getArSceneView().getScene().addChild(node);
 
-                        uiNode mainUi = new uiNode(this, R.layout.main_ui);
+                        mainUi = new uiNode(this, R.layout.main_ui);
+                        sideUi = new uiNode(this, R.layout.right_layout);
+                        frontUi = new uiNode(this, R.layout.front_layout);
+                        backUi = new uiNode(this, R.layout.back_layout);
 
-                        mainUi.setPosition(new Vector3(0,0,0),node);
+                        mainUi.setPosition(new Vector3(0,0,0), node);
+                        sideUi.setPosition(new Vector3(0, 0, 0), );
+                        frontUi.setPosition(new Vector3(0, 0, 0), );
+                        backUi.setPosition(new Vector3(0, 0, 0), );
 
                         Vector3 position = null;
 
@@ -262,5 +275,89 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return data;
+    }
+
+    void setInfo(Data data) {
+        if (data == null) {
+            return;
+        }
+
+        View vFront = frontUi.getView();
+        View vBack = backUi.getView();
+        View vSide = sideUi.getView();
+        View vMain = mainUi.getView();
+
+        ((TextView) vFront.findViewById(R.id.textViewId)).setText("" + data.getID());
+        ((TextView) vFront.findViewById(R.id.textViewJobName)).setText("" + data.getJobName());
+        ((TextView) vSide.findViewById(R.id.textViewMachineState)).setText("" + data.getMachineState());
+        ((TextView) vSide.findViewById(R.id.textViewMachineSpeed)).setText("" + data.getMachineSpeed());
+        ((TextView) vBack.findViewById(R.id.textViewInputCounter)).setText("" + data.getInputCounter());
+        ((TextView) vFront.findViewById(R.id.textViewOutputCounter)).setText("" + data.getOutputCounter());
+        ((TextView) vSide.findViewById(R.id.textViewCuttingForce)).setText("" + data.getCuttingForce());
+
+        // Setting warnings visibility
+        if (data.getUrgentStop()) {
+            vMain.findViewById(R.id.layout_urgent_stop).setVisibility(View.VISIBLE);
+        } else {
+            vMain.findViewById(R.id.layout_urgent_stop).setVisibility(View.GONE);
+        }
+        if (data.getNormalStop()) {
+            vMain.findViewById(R.id.layout_normal_stop).setVisibility(View.VISIBLE);
+        } else {
+            vMain.findViewById(R.id.layout_normal_stop).setVisibility(View.GONE);
+        }
+        if (data.getOpenProtection()) {
+            vMain.findViewById(R.id.layout_open).setVisibility(View.VISIBLE);
+        } else {
+            vMain.findViewById(R.id.layout_open).setVisibility(View.GONE);
+        }
+        if (data.getTechnicalDefect()) {
+            vMain.findViewById(R.id.layout_defect).setVisibility(View.VISIBLE);
+        } else {
+            vMain.findViewById(R.id.layout_defect).setVisibility(View.GONE);
+        }
+        if (data.getMachineSpeed() > data.getMachineSpeedMax()) {
+            vMain.findViewById(R.id.layout_speed).setVisibility(View.VISIBLE);
+        } else {
+            vMain.findViewById(R.id.layout_speed).setVisibility(View.GONE);
+        }
+        if (data.getCuttingForce() > data.getCuttingForceMax()) {
+            vMain.findViewById(R.id.layout_cut).setVisibility(View.VISIBLE);
+        } else {
+            vMain.findViewById(R.id.layout_cut).setVisibility(View.GONE);
+        }
+
+        // Setting status visibility
+        if (data.getMachineState() == 0) {
+            vMain.findViewById(R.id.layout_stopped).setVisibility(View.VISIBLE);
+            vMain.findViewById(R.id.layout_setting).setVisibility(View.GONE);
+            vMain.findViewById(R.id.layout_running).setVisibility(View.GONE);
+            vMain.findViewById(R.id.layout_producing).setVisibility(View.GONE);
+            vMain.findViewById(R.id.layout_shutdown).setVisibility(View.GONE);
+        } else if (data.getMachineState() == 1) {
+            vMain.findViewById(R.id.layout_stopped).setVisibility(View.GONE);
+            vMain.findViewById(R.id.layout_setting).setVisibility(View.VISIBLE);
+            vMain.findViewById(R.id.layout_running).setVisibility(View.GONE);
+            vMain.findViewById(R.id.layout_producing).setVisibility(View.GONE);
+            vMain.findViewById(R.id.layout_shutdown).setVisibility(View.GONE);
+        } else if (data.getMachineState() == 2) {
+            vMain.findViewById(R.id.layout_stopped).setVisibility(View.GONE);
+            vMain.findViewById(R.id.layout_setting).setVisibility(View.GONE);
+            vMain.findViewById(R.id.layout_running).setVisibility(View.VISIBLE);
+            vMain.findViewById(R.id.layout_producing).setVisibility(View.GONE);
+            vMain.findViewById(R.id.layout_shutdown).setVisibility(View.GONE);
+        } else if (data.getMachineState() == 3) {
+            vMain.findViewById(R.id.layout_stopped).setVisibility(View.GONE);
+            vMain.findViewById(R.id.layout_setting).setVisibility(View.GONE);
+            vMain.findViewById(R.id.layout_running).setVisibility(View.GONE);
+            vMain.findViewById(R.id.layout_producing).setVisibility(View.VISIBLE);
+            vMain.findViewById(R.id.layout_shutdown).setVisibility(View.GONE);
+        } else {
+            vMain.findViewById(R.id.layout_stopped).setVisibility(View.GONE);
+            vMain.findViewById(R.id.layout_setting).setVisibility(View.GONE);
+            vMain.findViewById(R.id.layout_running).setVisibility(View.GONE);
+            vMain.findViewById(R.id.layout_producing).setVisibility(View.GONE);
+            vMain.findViewById(R.id.layout_shutdown).setVisibility(View.VISIBLE);
+        }
     }
 }
