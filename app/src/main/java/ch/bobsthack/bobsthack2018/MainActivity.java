@@ -46,6 +46,10 @@ public class MainActivity extends AppCompatActivity {
     private boolean rightLayoutAdded = false;
     private boolean frontLayoutAdded = false;
 
+    private LayoutNode mRightLayout;
+    private LayoutNode mFrontLayout;
+    private LayoutNode mTopLayout;
+
     private Map<AugmentedImage, AugmentedImageNode> augmentedImageMap = new HashMap<>();
     private Map<AugmentedImage, TrackPointData> facePositions = new HashMap<>();
 
@@ -177,24 +181,24 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if(mCenterTop != null && !topLayoutAdded) {
-            LayoutNode mainUi = new LayoutNode(this, R.layout.main_ui);
-            mainUi.setPosition(mCenterTop.getWorldPosition());
-            mArFragment.getArSceneView().getScene().addChild(mainUi);
+            mTopLayout = new LayoutNode(this, R.layout.main_ui);
+            mTopLayout.setPosition(mCenterTop.getWorldPosition());
+            mArFragment.getArSceneView().getScene().addChild(mTopLayout);
             topLayoutAdded = true;
 
         }
 
         if(mCenterFront != null && !frontLayoutAdded) {
-            LayoutNode mainUi = new LayoutNode(this, R.layout.front_layout);
-            mainUi.setPosition(mCenterFront.getWorldPosition());
-            mArFragment.getArSceneView().getScene().addChild(mainUi);
+            mFrontLayout = new LayoutNode(this, R.layout.front_layout);
+            mFrontLayout.setPosition(mCenterFront.getWorldPosition());
+            mArFragment.getArSceneView().getScene().addChild(mFrontLayout);
             frontLayoutAdded = true;
         }
 
         if(mCenterRight != null && !rightLayoutAdded) {
-            LayoutNode mainUi = new LayoutNode(this, R.layout.right_layout);
-            mainUi.setPosition(mCenterRight.getWorldPosition());
-            mArFragment.getArSceneView().getScene().addChild(mainUi);
+            mRightLayout = new LayoutNode(this, R.layout.right_layout);
+            mRightLayout.setPosition(mCenterRight.getWorldPosition());
+            mArFragment.getArSceneView().getScene().addChild(mRightLayout);
             rightLayoutAdded = true;
         }
     }
