@@ -145,8 +145,6 @@ public class MainActivity extends AppCompatActivity {
                         if(pointData != null) {
                             facePositions.put(augmentedImage, pointData);
                         }
-                        /*LayoutNode mainUi = new LayoutNode(this, R.layout.main_ui);
-                        mainUi.setPosition(new Vector3(0,0,0), node);*/
                     }
 
                     break;
@@ -195,6 +193,20 @@ public class MainActivity extends AppCompatActivity {
             mainUi.setPosition(mCenterTop.getWorldPosition());
             mArFragment.getArSceneView().getScene().addChild(mainUi);
             topLayoutAdded = true;
+        }
+
+        if(mCenterFront != null && !frontLayoutAdded) {
+            LayoutNode mainUi = new LayoutNode(this, R.layout.front_layout);
+            mainUi.setPosition(mCenterFront.getWorldPosition());
+            mArFragment.getArSceneView().getScene().addChild(mainUi);
+            frontLayoutAdded = true;
+        }
+
+        if(mCenterRight != null && !rightLayoutAdded) {
+            LayoutNode mainUi = new LayoutNode(this, R.layout.right_layout);
+            mainUi.setPosition(mCenterRight.getWorldPosition());
+            mArFragment.getArSceneView().getScene().addChild(mainUi);
+            rightLayoutAdded = true;
         }
     }
 
