@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.ar.core.AugmentedImage;
@@ -35,6 +36,11 @@ public class MainActivity extends AppCompatActivity {
     private CenterNode mCenterRight;
     private CenterNode mCenterTop;
     private CenterNode mCenterFront;
+
+    private LayoutNode mainUi;
+    private LayoutNode sideUi;
+    private LayoutNode frontUi;
+    private LayoutNode backUi;
 
     private boolean topLayoutAdded = false;
     private boolean rightLayoutAdded = false;
@@ -75,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        // setInfo(data);
+                        setInfo(data);
                     }
                 });
                 try {
@@ -184,6 +190,7 @@ public class MainActivity extends AppCompatActivity {
             mTopLayout.setWorldRotation(mTopNormal);
             mArFragment.getArSceneView().getScene().addChild(mTopLayout);
             topLayoutAdded = true;
+
         }
 
         if(mCenterFront != null && !frontLayoutAdded) {
@@ -292,5 +299,86 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return data;
+    }
+
+    void setInfo(Data data) {
+        if (data == null)
+            return;
+
+
+        if (mFrontLayout == null)
+            return;
+
+        ((TextView) mFrontLayout.getView().findViewById(R.id.textViewId)).setText("" + data.getID());
+        ((TextView) mFrontLayout.getView().findViewById(R.id.textViewJobName)).setText("" + data.getJobName());
+        ((TextView) mRightLayout.getView().findViewById(R.id.textViewMachineState)).setText("" + data.getMachineState());
+        ((TextView) mRightLayout.getView().findViewById(R.id.textViewMachineSpeed)).setText("" + data.getMachineSpeed());
+        ((TextView) mFrontLayout.getView().findViewById(R.id.textViewOutputCounter)).setText("" + data.getOutputCounter());
+        ((TextView) mRightLayout.getView().findViewById(R.id.textViewCuttingForce)).setText("" + data.getCuttingForce());
+
+        // Setting warnings visibility
+        if (data.getUrgentStop()) {
+            mTopLayout.getView().findViewById(R.id.layout_urgent_stop).setVisibility(View.VISIBLE);
+        } else {
+            mTopLayout.getView().findViewById(R.id.layout_urgent_stop).setVisibility(View.GONE);
+        }
+        if (data.getNormalStop()) {
+            mTopLayout.getView().findViewById(R.id.layout_normal_stop).setVisibility(View.VISIBLE);
+        } else {
+            mTopLayout.getView().findViewById(R.id.layout_normal_stop).setVisibility(View.GONE);
+        }
+        if (data.getOpenProtection()) {
+            mTopLayout.getView().findViewById(R.id.layout_open).setVisibility(View.VISIBLE);
+        } else {
+            mTopLayout.getView().findViewById(R.id.layout_open).setVisibility(View.GONE);
+        }
+        if (data.getTechnicalDefect()) {
+            mTopLayout.getView().findViewById(R.id.layout_defect).setVisibility(View.VISIBLE);
+        } else {
+            mTopLayout.getView().findViewById(R.id.layout_defect).setVisibility(View.GONE);
+        }
+        if (data.getMachineSpeed() > data.getMachineSpeedMax()) {
+            mTopLayout.getView().findViewById(R.id.layout_speed).setVisibility(View.VISIBLE);
+        } else {
+            mTopLayout.getView().findViewById(R.id.layout_speed).setVisibility(View.GONE);
+        }
+        if (data.getCuttingForce() > data.getCuttingForceMax()) {
+            mTopLayout.getView().findViewById(R.id.layout_cut).setVisibility(View.VISIBLE);
+        } else {
+            mTopLayout.getView().findViewById(R.id.layout_cut).setVisibility(View.GONE);
+        }
+
+        // Setting status visibility
+        if (data.getMachineState() == 0) {
+            mTopLayout.getView().findViewById(R.id.layout_stopped).setVisibility(View.VISIBLE);
+            mTopLayout.getView().findViewById(R.id.layout_setting).setVisibility(View.GONE);
+            mTopLayout.getView().findViewById(R.id.layout_running).setVisibility(View.GONE);
+            mTopLayout.getView().findViewById(R.id.layout_producing).setVisibility(View.GONE);
+            mTopLayout.getView().findViewById(R.id.layout_shutdown).setVisibility(View.GONE);
+        } else if (data.getMachineState() == 1) {
+            mTopLayout.getView().findViewById(R.id.layout_stopped).setVisibility(View.GONE);
+            mTopLayout.getView().findViewById(R.id.layout_setting).setVisibility(View.VISIBLE);
+            mTopLayout.getView().findViewById(R.id.layout_running).setVisibility(View.GONE);
+            mTopLayout.getView().findViewById(R.id.layout_producing).setVisibility(View.GONE);
+            mTopLayout.getView().findViewById(R.id.layout_shutdown).setVisibility(View.GONE);
+        } else if (data.getMachineState() == 2) {
+            mTopLayout.getView().findViewById(R.id.layout_stopped).setVisibility(View.GONE);
+            mTopLayout.getView().findViewById(R.id.layout_setting).setVisibility(View.GONE);
+            mTopLayout.getView().findViewById(R.id.layout_running).setVisibility(View.VISIBLE);
+            mTopLayout.getView().findViewById(R.id.layout_producing).setVisibility(View.GONE);
+            mTopLayout.getView().findViewById(R.id.layout_shutdown).setVisibility(View.GONE);
+        } else if (data.getMachineState() == 3) {
+            mTopLayout.getView().findViewById(R.id.layout_stopped).setVisibility(View.GONE);
+            mTopLayout.getView().findViewById(R.id.layout_setting).setVisibility(View.GONE);
+            mTopLayout.getView().findViewById(R.id.layout_running).setVisibility(View.GONE);
+            mTopLayout.getView().findViewById(R.id.layout_producing).setVisibility(View.VISIBLE);
+            mTopLayout.getView().findViewById(R.id.layout_shutdown).setVisibility(View.GONE);
+        } else {
+            mTopLayout.getView().findViewById(R.id.layout_stopped).setVisibility(View.GONE);
+            mTopLayout.getView().findViewById(R.id.layout_setting).setVisibility(View.GONE);
+            mTopLayout.getView().findViewById(R.id.layout_running).setVisibility(View.GONE);
+            mTopLayout.getView().findViewById(R.id.layout_producing).setVisibility(View.GONE);
+            mTopLayout.getView().findViewById(R.id.layout_shutdown).setVisibility(View.VISIBLE);
+        }
     }
 }
