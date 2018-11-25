@@ -30,7 +30,7 @@
             android:layout_weight="0"
             android:text="Stopped"
             android:textAlignment="center"
-            android:textColor="@android:color/black"
+            android:textColor="@android:color/white"
             android:textSize="12sp" />
     </LinearLayout>
 
@@ -56,7 +56,7 @@
             android:layout_weight="0"
             android:text="Setting up"
             android:textAlignment="center"
-            android:textColor="@android:color/black"
+            android:textColor="@android:color/white"
             android:textSize="12sp" />
     </LinearLayout>
 
@@ -82,7 +82,7 @@
             android:layout_weight="0"
             android:text="Running"
             android:textAlignment="center"
-            android:textColor="@android:color/black"
+            android:textColor="@android:color/white"
             android:textSize="12sp" />
     </LinearLayout>
 
@@ -108,7 +108,7 @@
             android:layout_weight="0"
             android:text="Producing"
             android:textAlignment="center"
-            android:textColor="@android:color/black"
+            android:textColor="@android:color/white"
             android:textSize="12sp" />
     </LinearLayout>
 
@@ -134,9 +134,10 @@
             android:layout_weight="0"
             android:text="Shutdown"
             android:textAlignment="center"
-            android:textColor="@android:color/black"
+            android:textColor="@android:color/white"
             android:textSize="12sp" />
     </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -146,6 +147,12 @@
         android:gravity="right|end"
         android:orientation="horizontal"
         android:visibility="visible">
+
+        <Switch
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="bottom"/>
+
 
         <LinearLayout
             android:id="@+id/layout_normal_stop"
@@ -169,7 +176,7 @@
                 android:layout_weight="0"
                 android:text="Stop"
                 android:textAlignment="center"
-                android:textColor="@android:color/black" />
+                android:textColor="@android:color/white" />
         </LinearLayout>
 
         <LinearLayout
@@ -194,7 +201,7 @@
                 android:layout_weight="0"
                 android:text="Urgent Stop"
                 android:textAlignment="center"
-                android:textColor="@android:color/black" />
+                android:textColor="@android:color/white" />
         </LinearLayout>
 
         <LinearLayout
@@ -219,7 +226,7 @@
                 android:layout_weight="0"
                 android:text="Defect"
                 android:textAlignment="center"
-                android:textColor="@android:color/black" />
+                android:textColor="@android:color/white" />
         </LinearLayout>
 
         <LinearLayout
@@ -244,7 +251,7 @@
                 android:layout_weight="0"
                 android:text="Too Fast"
                 android:textAlignment="center"
-                android:textColor="@android:color/black" />
+                android:textColor="@android:color/white" />
         </LinearLayout>
 
         <LinearLayout
@@ -269,7 +276,7 @@
                 android:layout_weight="0"
                 android:text="Open"
                 android:textAlignment="center"
-                android:textColor="@android:color/black" />
+                android:textColor="@android:color/white" />
         </LinearLayout>
 
         <LinearLayout
@@ -294,7 +301,7 @@
                 android:layout_weight="0"
                 android:text="Pressure"
                 android:textAlignment="center"
-                android:textColor="@android:color/black" />
+                android:textColor="@android:color/white" />
         </LinearLayout>
 
     </LinearLayout>
