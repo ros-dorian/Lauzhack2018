@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import ch.bobsthack.bobsthack2018.tracker.AugmentedImageNode;
+import ch.bobsthack.bobsthack2018.ui.uiNode;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -83,7 +84,12 @@ public class MainActivity extends AppCompatActivity {
                         augmentedImageMap.put(augmentedImage, node);
                         mArFragment.getArSceneView().getScene().addChild(node);
 
+                        uiNode mainUi = new uiNode(this, R.layout.main_ui);
+
+                        mainUi.setPosition(new Vector3(0,0,0),node);
+
                         Vector3 position = null;
+
                         switch(augmentedImage.getIndex()) {
                             case 0: position = new Vector3(FACE_FRONT, -1/6f, 1f);
                             case 1: position = new Vector3(FACE_FRONT, 1/6f, 0.5f);
