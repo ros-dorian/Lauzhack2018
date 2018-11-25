@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(mCenterTop != null && !topLayoutAdded) {
             mTopLayout = new LayoutNode(this, R.layout.main_ui);
-            mTopLayout.setPosition(Vector3.add(mCenterTop.getWorldPosition(), new Vector3(0, 0.0f, 0)));
+            mTopLayout.setPosition(Vector3.add(mCenterTop.getWorldPosition(), new Vector3(0, 0.1f, 0)));
             mTopLayout.setWorldRotation(mTopNormal);
             mArFragment.getArSceneView().getScene().addChild(mTopLayout);
             topLayoutAdded = true;
@@ -192,14 +192,16 @@ public class MainActivity extends AppCompatActivity {
 
         if(mCenterFront != null && !frontLayoutAdded) {
             mFrontLayout = new LayoutNode(this, R.layout.front_layout);
-            mFrontLayout.setPosition(Vector3.add(mCenterFront.getWorldPosition(), new Vector3(-0.5f, 0, 0)));
+            mFrontLayout.setPosition(Vector3.add(mCenterFront.getWorldPosition(), new Vector3(0, 0, 0)));
+            mFrontLayout.setWorldRotation(Quaternion.multiply(mFrontNormal, Quaternion.axisAngle(new Vector3(1,0,0), -90)));
             mArFragment.getArSceneView().getScene().addChild(mFrontLayout);
             frontLayoutAdded = true;
         }
 
         if(mCenterRight != null && !rightLayoutAdded) {
             mRightLayout = new LayoutNode(this, R.layout.right_layout);
-            mRightLayout.setPosition(Vector3.add(mCenterRight.getWorldPosition(), new Vector3(0.0f, 0, 0)));
+            mRightLayout.setPosition(Vector3.add(mCenterRight.getWorldPosition(), new Vector3(0.0f, 0, -0.2f)));
+            mRightLayout.setWorldRotation(Quaternion.multiply(mRightNormal, Quaternion.axisAngle(new Vector3(1,0,0), -90)));
             mArFragment.getArSceneView().getScene().addChild(mRightLayout);
             rightLayoutAdded = true;
         }
