@@ -298,10 +298,10 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        ((TextView) mFrontLayout.findViewById(R.id.textViewId)).setText("" + data.getID());
+        ((TextView) mFrontLayout.getView().findViewById(R.id.textViewId)).setText("" + data.getID());
         ((TextView) mFrontLayout.findViewById(R.id.textViewJobName)).setText("" + data.getJobName());
-        ((TextView) vSide.findViewById(R.id.textViewMachineState)).setText("" + data.getMachineState());
-        ((TextView) vSide.findViewById(R.id.textViewMachineSpeed)).setText("" + data.getMachineSpeed());
+        ((TextView) mRightLayout.getView().findViewById(R.id.textViewMachineState)).setText("" + data.getMachineState());
+        ((TextView) mRightLayout.getView().findViewById(R.id.textViewMachineSpeed)).setText("" + data.getMachineSpeed());
         ((TextView) vBack.findViewById(R.id.textViewInputCounter)).setText("" + data.getInputCounter());
         ((TextView) vFront.findViewById(R.id.textViewOutputCounter)).setText("" + data.getOutputCounter());
         ((TextView) vSide.findViewById(R.id.textViewCuttingForce)).setText("" + data.getCuttingForce());
