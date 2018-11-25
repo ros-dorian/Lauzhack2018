@@ -10,28 +10,30 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
             <TextView
                 android:id="@+id/textViewLabelId"
-                android:layout_width="300dp"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:text="@string/id"
                 android:textColor="@android:color/background_light"
                 android:textSize="12sp"
                 android:textStyle="normal|bold"
-                android:visibility="visible"/>
+                android:visibility="visible" />
+
             <TextView
                 android:id="@+id/textViewId"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:textAlignment="viewStart"
                 android:textColor="@android:color/background_light"
                 android:textSize="12sp"
-                android:visibility="visible"/>
+                android:visibility="visible" />
         </LinearLayout>
 
         <LinearLayout
@@ -40,15 +42,16 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:visibility="visible">
+
             <TextView
                 android:id="@+id/textViewLabelOutputCounter"
-                android:layout_width="300dp"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:text="@string/output_counter"
                 android:textColor="@android:color/background_light"
                 android:textSize="12sp"
                 android:textStyle="normal|bold"
-                android:visibility="visible"/>
+                android:visibility="visible" />
             <TextView
                 android:id="@+id/textViewOutputCounter"
                 android:layout_width="0dp"
@@ -64,15 +67,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
             <TextView
                 android:id="@+id/textViewLabelJobName"
-                android:layout_width="300dp"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:text="@string/job_name"
                 android:textColor="@android:color/background_light"
                 android:textSize="12sp"
                 android:textStyle="normal|bold"
-                android:visibility="visible"/>
+                android:visibility="visible" />
             <TextView
                 android:id="@+id/textViewJobName"
                 android:layout_width="0dp"
