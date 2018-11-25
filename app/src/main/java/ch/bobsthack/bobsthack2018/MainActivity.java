@@ -15,14 +15,19 @@ import com.google.ar.sceneform.FrameTime;
 import com.google.ar.sceneform.math.Vector3;
 import com.google.ar.sceneform.ux.ArFragment;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import ch.bobsthack.bobsthack2018.tracker.AugmentedImageNode;
 import ch.bobsthack.bobsthack2018.tracker.CenterNode;
+import ch.bobsthack.bobsthack2018.ui.uiNode;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -53,6 +58,23 @@ public class MainActivity extends AppCompatActivity {
         mCenterRight = null;
         mCenterTop = null;
         mCenterFront = null;
+
+        new Thread(() -> {
+            while(true) {
+                Data data = getData();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // setInfo(data); TODO
+                    }
+                });
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }}
+        ).start();
     }
 
     @Override
@@ -91,6 +113,12 @@ public class MainActivity extends AppCompatActivity {
                         node.setImage(augmentedImage);
                         augmentedImageMap.put(augmentedImage, node);
                         mArFragment.getArSceneView().getScene().addChild(node);
+
+                        uiNode mainUi = new uiNode(this, R.layout.main_ui);
+
+                        mainUi.setPosition(new Vector3(0,0,0),node);
+
+                        Vector3 position = null;
 
                         TrackPointData pointData = null;
                         switch(augmentedImage.getIndex()) {
@@ -208,5 +236,31 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return result;
+    }
+
+    public Data getData() {
+        //JSon query
+        String url = "http://www.duggan.ch/~akv_lauzhack/mastercut.php?MachineName=MasterCut";
+        JsonQuery jsonQuery = new JsonQuery();
+        JSONObject json = null;
+        try {
+            json = jsonQuery.getJson(url).get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        if (json != null)
+            Log.i("Lauzhack", json.toString());
+
+        Data data = null;
+
+        try {
+            if (json != null)
+                data = new Data(json);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return data;
     }
 }
