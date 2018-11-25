@@ -3,6 +3,7 @@ package ch.bobsthack.bobsthack2018;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -11,20 +12,28 @@ import com.google.ar.core.AugmentedImage;
 import com.google.ar.core.Frame;
 import com.google.ar.core.TrackingState;
 import com.google.ar.sceneform.FrameTime;
+import com.google.ar.sceneform.math.Vector3;
 import com.google.ar.sceneform.ux.ArFragment;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import ch.bobsthack.bobsthack2018.tracker.AugmentedImageNode;
 
 public class MainActivity extends AppCompatActivity {
 
+    public final static int FACE_RIGHT = 0;
+    public final static int FACE_FRONT = 1;
+    public final static int FACE_TOP = 2;
+
     private ArFragment mArFragment;
     private ImageView mFitToScanView;
 
     private Map<AugmentedImage, AugmentedImageNode> augmentedImageMap = new HashMap<>();
+    private Map<AugmentedImage, Vector3> facePositions = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,13 +82,43 @@ public class MainActivity extends AppCompatActivity {
                         node.setImage(augmentedImage);
                         augmentedImageMap.put(augmentedImage, node);
                         mArFragment.getArSceneView().getScene().addChild(node);
+
+                        Vector3 position = null;
+                        switch(augmentedImage.getIndex()) {
+                            case 0: position = new Vector3(FACE_FRONT, -1/6f, 1f);
+                            case 1: position = new Vector3(FACE_FRONT, 1/6f, 0.5f);
+                            case 2: position = new Vector3(FACE_FRONT, -1f, 0.5f);
+                            case 3: position = new Vector3(FACE_RIGHT, 0, 0);
+                            case 4: position = new Vector3(FACE_TOP, 2/6f, 0);
+                        }
+                        if(position != null) {
+                            facePositions.put(augmentedImage, position);
+                        }
+
+                        Vector3[] centers = calculateCenters();
                     }
                     break;
 
                 case STOPPED:
                     augmentedImageMap.remove(augmentedImage);
+                    facePositions.remove(augmentedImage);
                     break;
             }
         }
+    }
+
+    private Vector3[] calculateCenters() {
+        Vector3[] result = new Vector3[3];
+
+        List<Pair<Vector3, Vector3>> availablePositions = new ArrayList<>();
+        for(Map.Entry<AugmentedImage, AugmentedImageNode> entry : augmentedImageMap.entrySet()) {
+            availablePositions.add(new Pair(entry.getValue().getWorldPosition(), facePositions.get(entry.getKey())));
+        }
+
+        for(Pair<Vector3, Vector3> item : availablePositions) {
+
+        }
+
+        return result;
     }
 }

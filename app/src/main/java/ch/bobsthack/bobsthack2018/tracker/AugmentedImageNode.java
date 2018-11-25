@@ -2,11 +2,18 @@ package ch.bobsthack.bobsthack2018.tracker;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.MotionEvent;
 
 import com.google.ar.core.AugmentedImage;
 import com.google.ar.sceneform.AnchorNode;
+import com.google.ar.sceneform.HitTestResult;
 import com.google.ar.sceneform.Node;
+import com.google.ar.sceneform.math.Quaternion;
 import com.google.ar.sceneform.math.Vector3;
+import com.google.ar.sceneform.rendering.Color;
+import com.google.ar.sceneform.rendering.Material;
+import com.google.ar.sceneform.rendering.MaterialFactory;
+import com.google.ar.sceneform.rendering.ShapeFactory;
 import com.google.ar.sceneform.rendering.ViewRenderable;
 
 import java.util.concurrent.CompletableFuture;
@@ -19,9 +26,13 @@ public class AugmentedImageNode extends AnchorNode {
 
     private AugmentedImage image;
 
+    private Context mContext;
+
     private static CompletableFuture<ViewRenderable> mCenter;
 
     public AugmentedImageNode(Context context) {
+        mContext = context;
+
         if (mCenter == null) {
             mCenter = ViewRenderable.builder()
                             .setView(context, R.layout.tracker_layout)
@@ -51,20 +62,15 @@ public class AugmentedImageNode extends AnchorNode {
         Node centerNode;
 
         // Upper left corner.
-        localPosition.set(image.getExtentX(), 0.0f, image.getExtentZ());
+        localPosition.set(0.0f, 0.0f, 0.0f);
         centerNode = new Node();
         centerNode.setParent(this);
         centerNode.setLocalPosition(localPosition);
-        centerNode.setLookDirection(new Vector3(0, 0, 1));
+        centerNode.setLocalRotation(Quaternion.axisAngle(new Vector3(1, 0, 0), 90));
         centerNode.setRenderable(mCenter.getNow(null));
     }
 
     public AugmentedImage getImage() {
         return image;
-    }
-
-    @Override
-    public void onDeactivate() {
-        super.onDeactivate();
     }
 }
