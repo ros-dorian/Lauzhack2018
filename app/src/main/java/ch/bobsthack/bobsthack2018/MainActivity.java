@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(mCenterTop != null && !topLayoutAdded) {
             mTopLayout = new LayoutNode(this, R.layout.main_ui);
-            mTopLayout.setPosition(mCenterTop.getWorldPosition());
+            mTopLayout.setPosition(Vector3.add(mCenterTop.getWorldPosition(), new Vector3(0, 0.0f, 0)));
             mTopLayout.setWorldRotation(mTopNormal);
             mArFragment.getArSceneView().getScene().addChild(mTopLayout);
             topLayoutAdded = true;
@@ -192,14 +192,14 @@ public class MainActivity extends AppCompatActivity {
 
         if(mCenterFront != null && !frontLayoutAdded) {
             mFrontLayout = new LayoutNode(this, R.layout.front_layout);
-            mFrontLayout.setPosition(mCenterFront.getWorldPosition());
+            mFrontLayout.setPosition(Vector3.add(mCenterFront.getWorldPosition(), new Vector3(-0.5f, 0, 0)));
             mArFragment.getArSceneView().getScene().addChild(mFrontLayout);
             frontLayoutAdded = true;
         }
 
         if(mCenterRight != null && !rightLayoutAdded) {
             mRightLayout = new LayoutNode(this, R.layout.right_layout);
-            mRightLayout.setPosition(mCenterRight.getWorldPosition());
+            mRightLayout.setPosition(Vector3.add(mCenterRight.getWorldPosition(), new Vector3(0.0f, 0, 0)));
             mArFragment.getArSceneView().getScene().addChild(mRightLayout);
             rightLayoutAdded = true;
         }
