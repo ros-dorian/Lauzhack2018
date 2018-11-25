@@ -122,18 +122,6 @@ public class MainActivity extends AppCompatActivity {
                         augmentedImageMap.put(augmentedImage, node);
                         mArFragment.getArSceneView().getScene().addChild(node);
 
-                        mainUi = new LayoutNode(this, R.layout.main_ui);
-                        sideUi = new LayoutNode(this, R.layout.right_layout);
-                        frontUi = new LayoutNode(this, R.layout.front_layout);
-                        backUi = new LayoutNode(this, R.layout.back_layout);
-
-                        mainUi.setPosition(new Vector3(0,0,0));
-                        sideUi.setPosition(new Vector3(0, 0, 0));
-                        frontUi.setPosition(new Vector3(0, 0, 0));
-                        backUi.setPosition(new Vector3(0, 0, 0));
-
-                        Vector3 position = null;
-
                         TrackPointData pointData = null;
                         switch(augmentedImage.getIndex()) {
                             case 0: pointData = new TrackPointData(node.getWorldPosition(), BoxSide.RIGHT, -0.4f, 1f); break;
@@ -193,6 +181,7 @@ public class MainActivity extends AppCompatActivity {
             mainUi.setPosition(mCenterTop.getWorldPosition());
             mArFragment.getArSceneView().getScene().addChild(mainUi);
             topLayoutAdded = true;
+
         }
 
         if(mCenterFront != null && !frontLayoutAdded) {
@@ -305,13 +294,8 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        View vFront = frontUi.getView();
-        View vBack = backUi.getView();
-        View vSide = sideUi.getView();
-        View vMain = mainUi.getView();
-
-        ((TextView) vFront.findViewById(R.id.textViewId)).setText("" + data.getID());
-        ((TextView) vFront.findViewById(R.id.textViewJobName)).setText("" + data.getJobName());
+        ((TextView) mFrontLayout.findViewById(R.id.textViewId)).setText("" + data.getID());
+        ((TextView) mFrontLayout.findViewById(R.id.textViewJobName)).setText("" + data.getJobName());
         ((TextView) vSide.findViewById(R.id.textViewMachineState)).setText("" + data.getMachineState());
         ((TextView) vSide.findViewById(R.id.textViewMachineSpeed)).setText("" + data.getMachineSpeed());
         ((TextView) vBack.findViewById(R.id.textViewInputCounter)).setText("" + data.getInputCounter());
