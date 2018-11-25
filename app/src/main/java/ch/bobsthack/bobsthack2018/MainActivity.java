@@ -11,6 +11,7 @@ import com.google.ar.core.AugmentedImage;
 import com.google.ar.core.Frame;
 import com.google.ar.core.TrackingState;
 import com.google.ar.sceneform.FrameTime;
+import com.google.ar.sceneform.math.Quaternion;
 import com.google.ar.sceneform.math.Vector3;
 import com.google.ar.sceneform.ux.ArFragment;
 
@@ -42,6 +43,10 @@ public class MainActivity extends AppCompatActivity {
     private LayoutNode mRightLayout;
     private LayoutNode mFrontLayout;
     private LayoutNode mTopLayout;
+
+    private Quaternion mFrontNormal;
+    private Quaternion mTopNormal;
+    private Quaternion mRightNormal;
 
     private Map<AugmentedImage, AugmentedImageNode> augmentedImageMap = new HashMap<>();
     private Map<AugmentedImage, TrackPointData> facePositions = new HashMap<>();
@@ -176,6 +181,7 @@ public class MainActivity extends AppCompatActivity {
         if(mCenterTop != null && !topLayoutAdded) {
             mTopLayout = new LayoutNode(this, R.layout.main_ui);
             mTopLayout.setPosition(mCenterTop.getWorldPosition());
+            mTopLayout.setWorldRotation(mTopNormal);
             mArFragment.getArSceneView().getScene().addChild(mTopLayout);
             topLayoutAdded = true;
         }
@@ -206,6 +212,7 @@ public class MainActivity extends AppCompatActivity {
             Vector3 yVector;
             switch(side) {
                 case 0:
+                    mRightNormal = imageNode.getLocalRotation();
                     xVector = imageNode.getForward().normalized();
                     yVector = imageNode.getRight().normalized();
                     if(result[side] == null) {
@@ -222,6 +229,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     break;
                 case 1:
+                    mTopNormal = imageNode.getLocalRotation();
                     xVector = imageNode.getRight().normalized();
                     yVector = imageNode.getForward().normalized();
                     if(result[side] == null) {
@@ -238,6 +246,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     break;
                 case 2:
+                    mFrontNormal = imageNode.getLocalRotation();
                     xVector = imageNode.getRight().normalized();
                     yVector = imageNode.getForward().normalized();
                     if(result[side] == null) {
