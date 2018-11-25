@@ -3,7 +3,6 @@ package ch.bobsthack.bobsthack2018;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.Pair;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -18,16 +17,14 @@ import com.google.ar.sceneform.ux.ArFragment;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import ch.bobsthack.bobsthack2018.tracker.AugmentedImageNode;
 import ch.bobsthack.bobsthack2018.tracker.CenterNode;
-import ch.bobsthack.bobsthack2018.ui.uiNode;
+import ch.bobsthack.bobsthack2018.ui.LayoutNode;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -37,6 +34,10 @@ public class MainActivity extends AppCompatActivity {
     private CenterNode mCenterRight;
     private CenterNode mCenterTop;
     private CenterNode mCenterFront;
+
+    private boolean topLayoutAdded = false;
+    private boolean rightLayoutAdded = false;
+    private boolean frontLayoutAdded = false;
 
     private Map<AugmentedImage, AugmentedImageNode> augmentedImageMap = new HashMap<>();
     private Map<AugmentedImage, TrackPointData> facePositions = new HashMap<>();
@@ -114,12 +115,6 @@ public class MainActivity extends AppCompatActivity {
                         augmentedImageMap.put(augmentedImage, node);
                         mArFragment.getArSceneView().getScene().addChild(node);
 
-                        uiNode mainUi = new uiNode(this, R.layout.main_ui);
-
-                        mainUi.setPosition(new Vector3(0,0,0),node);
-
-                        Vector3 position = null;
-
                         TrackPointData pointData = null;
                         switch(augmentedImage.getIndex()) {
                             case 0: pointData = new TrackPointData(node.getWorldPosition(), BoxSide.RIGHT, -0.4f, 1f); break;
@@ -131,7 +126,10 @@ public class MainActivity extends AppCompatActivity {
                         if(pointData != null) {
                             facePositions.put(augmentedImage, pointData);
                         }
+                        /*LayoutNode mainUi = new LayoutNode(this, R.layout.main_ui);
+                        mainUi.setPosition(new Vector3(0,0,0), node);*/
                     }
+
                     break;
 
                 case STOPPED:
@@ -171,6 +169,13 @@ public class MainActivity extends AppCompatActivity {
                         break;
                 }
             }
+        }
+
+        if(mCenterTop != null && !topLayoutAdded) {
+            LayoutNode mainUi = new LayoutNode(this, R.layout.main_ui);
+            mainUi.setPosition(mCenterTop.getWorldPosition());
+            mArFragment.getArSceneView().getScene().addChild(mainUi);
+            topLayoutAdded = true;
         }
     }
 
