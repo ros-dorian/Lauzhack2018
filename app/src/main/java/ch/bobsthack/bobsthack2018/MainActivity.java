@@ -284,14 +284,16 @@ public class MainActivity extends AppCompatActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        if (json != null)
+        if (json != null) {
             Log.i("Lauzhack", json.toString());
+        }
 
         Data data = null;
 
         try {
-            if (json != null)
+            if (json != null) {
                 data = new Data(json);
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -299,8 +301,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void setInfo(Data data) {
-        if (data == null)
+        if (data == null) {
             return;
+        }
 
         if (mFrontLayout != null) {
             ((TextView) mFrontLayout.getView().findViewById(R.id.textViewId)).setText("" + data.getID());
