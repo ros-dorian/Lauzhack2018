@@ -51,4 +51,8 @@ public class LayoutNode extends Node {
             setRenderable(renderable);
         }
     }
+
+    public View getView() {
+        return mView;
+    }
 }
