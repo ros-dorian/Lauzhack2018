@@ -78,11 +78,8 @@ public class MainActivity extends AppCompatActivity {
         new Thread(() -> {
             while(true) {
                 Data data = getData();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        setInfo(data);
-                    }
+                runOnUiThread(() -> {
+                    setInfo(data);
                 });
                 try {
                     Thread.sleep(2000);
@@ -305,80 +302,83 @@ public class MainActivity extends AppCompatActivity {
         if (data == null)
             return;
 
-
-        if (mFrontLayout == null)
-            return;
-
-        ((TextView) mFrontLayout.getView().findViewById(R.id.textViewId)).setText("" + data.getID());
-        ((TextView) mFrontLayout.getView().findViewById(R.id.textViewJobName)).setText("" + data.getJobName());
-        ((TextView) mRightLayout.getView().findViewById(R.id.textViewMachineState)).setText("" + data.getMachineState());
-        ((TextView) mRightLayout.getView().findViewById(R.id.textViewMachineSpeed)).setText("" + data.getMachineSpeed());
-        ((TextView) mFrontLayout.getView().findViewById(R.id.textViewOutputCounter)).setText("" + data.getOutputCounter());
-        ((TextView) mRightLayout.getView().findViewById(R.id.textViewCuttingForce)).setText("" + data.getCuttingForce());
-
-        // Setting warnings visibility
-        if (data.getUrgentStop()) {
-            mTopLayout.getView().findViewById(R.id.layout_urgent_stop).setVisibility(View.VISIBLE);
-        } else {
-            mTopLayout.getView().findViewById(R.id.layout_urgent_stop).setVisibility(View.GONE);
-        }
-        if (data.getNormalStop()) {
-            mTopLayout.getView().findViewById(R.id.layout_normal_stop).setVisibility(View.VISIBLE);
-        } else {
-            mTopLayout.getView().findViewById(R.id.layout_normal_stop).setVisibility(View.GONE);
-        }
-        if (data.getOpenProtection()) {
-            mTopLayout.getView().findViewById(R.id.layout_open).setVisibility(View.VISIBLE);
-        } else {
-            mTopLayout.getView().findViewById(R.id.layout_open).setVisibility(View.GONE);
-        }
-        if (data.getTechnicalDefect()) {
-            mTopLayout.getView().findViewById(R.id.layout_defect).setVisibility(View.VISIBLE);
-        } else {
-            mTopLayout.getView().findViewById(R.id.layout_defect).setVisibility(View.GONE);
-        }
-        if (data.getMachineSpeed() > data.getMachineSpeedMax()) {
-            mTopLayout.getView().findViewById(R.id.layout_speed).setVisibility(View.VISIBLE);
-        } else {
-            mTopLayout.getView().findViewById(R.id.layout_speed).setVisibility(View.GONE);
-        }
-        if (data.getCuttingForce() > data.getCuttingForceMax()) {
-            mTopLayout.getView().findViewById(R.id.layout_cut).setVisibility(View.VISIBLE);
-        } else {
-            mTopLayout.getView().findViewById(R.id.layout_cut).setVisibility(View.GONE);
+        if (mFrontLayout != null) {
+            ((TextView) mFrontLayout.getView().findViewById(R.id.textViewId)).setText("" + data.getID());
+            ((TextView) mFrontLayout.getView().findViewById(R.id.textViewJobName)).setText("" + data.getJobName());
+            ((TextView) mFrontLayout.getView().findViewById(R.id.textViewOutputCounter)).setText("" + data.getOutputCounter());
         }
 
-        // Setting status visibility
-        if (data.getMachineState() == 0) {
-            mTopLayout.getView().findViewById(R.id.layout_stopped).setVisibility(View.VISIBLE);
-            mTopLayout.getView().findViewById(R.id.layout_setting).setVisibility(View.GONE);
-            mTopLayout.getView().findViewById(R.id.layout_running).setVisibility(View.GONE);
-            mTopLayout.getView().findViewById(R.id.layout_producing).setVisibility(View.GONE);
-            mTopLayout.getView().findViewById(R.id.layout_shutdown).setVisibility(View.GONE);
-        } else if (data.getMachineState() == 1) {
-            mTopLayout.getView().findViewById(R.id.layout_stopped).setVisibility(View.GONE);
-            mTopLayout.getView().findViewById(R.id.layout_setting).setVisibility(View.VISIBLE);
-            mTopLayout.getView().findViewById(R.id.layout_running).setVisibility(View.GONE);
-            mTopLayout.getView().findViewById(R.id.layout_producing).setVisibility(View.GONE);
-            mTopLayout.getView().findViewById(R.id.layout_shutdown).setVisibility(View.GONE);
-        } else if (data.getMachineState() == 2) {
-            mTopLayout.getView().findViewById(R.id.layout_stopped).setVisibility(View.GONE);
-            mTopLayout.getView().findViewById(R.id.layout_setting).setVisibility(View.GONE);
-            mTopLayout.getView().findViewById(R.id.layout_running).setVisibility(View.VISIBLE);
-            mTopLayout.getView().findViewById(R.id.layout_producing).setVisibility(View.GONE);
-            mTopLayout.getView().findViewById(R.id.layout_shutdown).setVisibility(View.GONE);
-        } else if (data.getMachineState() == 3) {
-            mTopLayout.getView().findViewById(R.id.layout_stopped).setVisibility(View.GONE);
-            mTopLayout.getView().findViewById(R.id.layout_setting).setVisibility(View.GONE);
-            mTopLayout.getView().findViewById(R.id.layout_running).setVisibility(View.GONE);
-            mTopLayout.getView().findViewById(R.id.layout_producing).setVisibility(View.VISIBLE);
-            mTopLayout.getView().findViewById(R.id.layout_shutdown).setVisibility(View.GONE);
-        } else {
-            mTopLayout.getView().findViewById(R.id.layout_stopped).setVisibility(View.GONE);
-            mTopLayout.getView().findViewById(R.id.layout_setting).setVisibility(View.GONE);
-            mTopLayout.getView().findViewById(R.id.layout_running).setVisibility(View.GONE);
-            mTopLayout.getView().findViewById(R.id.layout_producing).setVisibility(View.GONE);
-            mTopLayout.getView().findViewById(R.id.layout_shutdown).setVisibility(View.VISIBLE);
+        if(mTopLayout != null) {
+            // Setting warnings visibility
+            if (data.getUrgentStop()) {
+                mTopLayout.getView().findViewById(R.id.layout_urgent_stop).setVisibility(View.VISIBLE);
+            } else {
+                mTopLayout.getView().findViewById(R.id.layout_urgent_stop).setVisibility(View.GONE);
+            }
+            if (data.getNormalStop()) {
+                mTopLayout.getView().findViewById(R.id.layout_normal_stop).setVisibility(View.VISIBLE);
+            } else {
+                mTopLayout.getView().findViewById(R.id.layout_normal_stop).setVisibility(View.GONE);
+            }
+            if (data.getOpenProtection()) {
+                mTopLayout.getView().findViewById(R.id.layout_open).setVisibility(View.VISIBLE);
+            } else {
+                mTopLayout.getView().findViewById(R.id.layout_open).setVisibility(View.GONE);
+            }
+            if (data.getTechnicalDefect()) {
+                mTopLayout.getView().findViewById(R.id.layout_defect).setVisibility(View.VISIBLE);
+            } else {
+                mTopLayout.getView().findViewById(R.id.layout_defect).setVisibility(View.GONE);
+            }
+            if (data.getMachineSpeed() > data.getMachineSpeedMax()) {
+                mTopLayout.getView().findViewById(R.id.layout_speed).setVisibility(View.VISIBLE);
+            } else {
+                mTopLayout.getView().findViewById(R.id.layout_speed).setVisibility(View.GONE);
+            }
+            if (data.getCuttingForce() > data.getCuttingForceMax()) {
+                mTopLayout.getView().findViewById(R.id.layout_cut).setVisibility(View.VISIBLE);
+            } else {
+                mTopLayout.getView().findViewById(R.id.layout_cut).setVisibility(View.GONE);
+            }
+
+            // Setting status visibility
+            if (data.getMachineState() == 0) {
+                mTopLayout.getView().findViewById(R.id.layout_stopped).setVisibility(View.VISIBLE);
+                mTopLayout.getView().findViewById(R.id.layout_setting).setVisibility(View.GONE);
+                mTopLayout.getView().findViewById(R.id.layout_running).setVisibility(View.GONE);
+                mTopLayout.getView().findViewById(R.id.layout_producing).setVisibility(View.GONE);
+                mTopLayout.getView().findViewById(R.id.layout_shutdown).setVisibility(View.GONE);
+            } else if (data.getMachineState() == 1) {
+                mTopLayout.getView().findViewById(R.id.layout_stopped).setVisibility(View.GONE);
+                mTopLayout.getView().findViewById(R.id.layout_setting).setVisibility(View.VISIBLE);
+                mTopLayout.getView().findViewById(R.id.layout_running).setVisibility(View.GONE);
+                mTopLayout.getView().findViewById(R.id.layout_producing).setVisibility(View.GONE);
+                mTopLayout.getView().findViewById(R.id.layout_shutdown).setVisibility(View.GONE);
+            } else if (data.getMachineState() == 2) {
+                mTopLayout.getView().findViewById(R.id.layout_stopped).setVisibility(View.GONE);
+                mTopLayout.getView().findViewById(R.id.layout_setting).setVisibility(View.GONE);
+                mTopLayout.getView().findViewById(R.id.layout_running).setVisibility(View.VISIBLE);
+                mTopLayout.getView().findViewById(R.id.layout_producing).setVisibility(View.GONE);
+                mTopLayout.getView().findViewById(R.id.layout_shutdown).setVisibility(View.GONE);
+            } else if (data.getMachineState() == 3) {
+                mTopLayout.getView().findViewById(R.id.layout_stopped).setVisibility(View.GONE);
+                mTopLayout.getView().findViewById(R.id.layout_setting).setVisibility(View.GONE);
+                mTopLayout.getView().findViewById(R.id.layout_running).setVisibility(View.GONE);
+                mTopLayout.getView().findViewById(R.id.layout_producing).setVisibility(View.VISIBLE);
+                mTopLayout.getView().findViewById(R.id.layout_shutdown).setVisibility(View.GONE);
+            } else {
+                mTopLayout.getView().findViewById(R.id.layout_stopped).setVisibility(View.GONE);
+                mTopLayout.getView().findViewById(R.id.layout_setting).setVisibility(View.GONE);
+                mTopLayout.getView().findViewById(R.id.layout_running).setVisibility(View.GONE);
+                mTopLayout.getView().findViewById(R.id.layout_producing).setVisibility(View.GONE);
+                mTopLayout.getView().findViewById(R.id.layout_shutdown).setVisibility(View.VISIBLE);
+            }
+        }
+
+        if(mRightLayout != null) {
+            ((TextView) mRightLayout.getView().findViewById(R.id.textViewMachineState)).setText("" + data.getMachineState());
+            ((TextView) mRightLayout.getView().findViewById(R.id.textViewMachineSpeed)).setText("" + data.getMachineSpeed());
+            ((TextView) mRightLayout.getView().findViewById(R.id.textViewCuttingForce)).setText("" + data.getCuttingForce());
         }
     }
 }
