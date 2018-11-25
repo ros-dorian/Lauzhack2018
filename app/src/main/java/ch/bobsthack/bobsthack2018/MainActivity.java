@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        // setInfo(data); TODO
+                        // setInfo(data);
                     }
                 });
                 try {
